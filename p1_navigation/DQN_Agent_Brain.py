@@ -13,7 +13,7 @@ BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 128         # minibatch size
 GAMMA = 0.99            # discount factor
 TAU = 1e-3              # for soft update of target parameters
-LR = 8e-4               # learning rate 
+LR = 7e-4               # learning rate 
 UPDATE_EVERY = 4        # how often to update the network
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -22,7 +22,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class QNetwork(nn.Module):
 
-    def __init__(self, state_size, action_size, seed, fc1_units=128, fc2_units=64):
+    def __init__(self, state_size, action_size, seed, fc1_units=64, fc2_units=32):
         super(QNetwork, self).__init__()
         self.state_size = state_size
         self.action_size = action_size
