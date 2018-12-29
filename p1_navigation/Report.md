@@ -69,7 +69,7 @@ Below is the number of episodes needed to solve the environment for DQNs
 
     Environment solved in 1900 episodes!	Average Score: 13.01
 
-![Learning_results](p1_navigation/Double_Q_network.png)
+![Learning_results](Double_Q_network.png)
 
 #### 2. Dropout DQN
     Episode 100	Average Score: 0.24
@@ -99,7 +99,7 @@ Below is the number of episodes needed to solve the environment for DQNs
     Episode 2444	Average Score: 13.06
     Environment solved in 2344 episodes!	Average Score: 13.06
 
-![Learning_results](p1_navigation/Drop_DQN.png)
+![Learning_results](Drop_DQN.png)
 
 #### 3. Duel DQN
     Episode 100	Average Score: 0.26
@@ -127,7 +127,7 @@ Below is the number of episodes needed to solve the environment for DQNs
     Episode 2248	Average Score: 13.01
     Environment solved in 2148 episodes!	Average Score: 13.01
 
-![Learning_results](p1_navigation/Duel_DQN.png)
+![Learning_results](Duel_DQN.png)
 
 #### 4. Single DQN
     Episode 100	Average Score: 0.21
@@ -154,7 +154,7 @@ Below is the number of episodes needed to solve the environment for DQNs
     Episode 2125	Average Score: 13.05
     Environment solved in 2025 episodes!	Average Score: 13.05
 
-![Learning_results](p1_navigation/single_DQN.png) 
+![Learning_results](single_DQN.png) 
 
 ### Ideas for future improvements
 

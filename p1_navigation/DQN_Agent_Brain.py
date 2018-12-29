@@ -7,7 +7,7 @@ import torch.optim as optim
 from collections import namedtuple
 from collections import deque
 
-from model import QNetwork
+from model import QNetwork, Dueling_DQN, DQN_Drop
 # Pre defined variables
 
 BUFFER_SIZE = int(1e5)  # replay buffer size
@@ -73,7 +73,7 @@ class Agent():
         seed (int): random seed
     """
 
-    def __init__(self, state_size, action_size, seed, filename=None):
+    def __init__(self, state_size, action_size, seed, filename=None, isDuel=False, isDrop=False, isDoubleQNetwork=False):
         """Initialize an Agent object.
         
         Args:
@@ -82,10 +82,19 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
+        self.isDoubleQNetwork = isDoubleQNetwork
 
         # Q-Network
-        self.qnetwork_local = QNetwork(state_size, action_size, seed).to(device)
-        self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
+        if isDuel:
+            self.qnetwork_local = Dueling_DQN(state_size, action_size, seed).to(device)
+            self.qnetwork_target = Dueling_DQN(state_size, action_size, seed).to(device)
+        elif isDrop:
+            self.qnetwork_local = DQN_Drop(state_size, action_size, seed).to(device)
+            self.qnetwork_target = DQN_Drop(state_size, action_size, seed).to(device)
+        else:
+            self.qnetwork_local = QNetwork(state_size, action_size, seed).to(device)
+            self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
+        
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
         # Load trained brain if exist
         if filename:
@@ -137,7 +146,14 @@ class Agent():
         """
         states, actions, rewards, next_states, dones = experiences
 
-        Q_target_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+        if self.isDoubleQNetwork: # double Q network
+            idmax=self.qnetwork_local(next_states).detach().max(1)[1].unsqueeze(1)
+            Q_target_next=self.qnetwork_target(next_states).gather(1,idmax)
+        else:   
+            # return max and overestimate
+            Q_target_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+        
+        
         Q_target = rewards + (gamma * Q_target_next * (1 - dones))  
         Q_expected = self.qnetwork_local(states).gather(1, actions)
         loss = F.mse_loss(Q_expected, Q_target)
